@@ -1,0 +1,11 @@
+tree: libtree.a main.o
+	gcc -o tree main.o -L. -ltree
+libtree.a: func.o
+	ar r libtree.a func.o
+func.o: func.c
+	gcc -c func.c
+main.o: main.c
+	gcc -c main.c
+clean:
+	rm *.o
+	rm *.a

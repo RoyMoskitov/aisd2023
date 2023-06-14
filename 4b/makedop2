@@ -1,0 +1,15 @@
+tree: libtree.a main.o lib3g.o libg.o
+	gcc -o tree main.o lib3g.o libg.o -L. -ltree
+libtree.a: func.o
+	ar r libtree.a func.o
+lib3g.o: lib3g.c 
+	gcc -c lib3g.c
+libg.o: libg.c
+	gcc -c libg.c
+func.o: func.c
+	gcc -c func.c
+main.o: main.c
+	gcc -c main.c
+clean:
+	rm *.o
+	rm *.a

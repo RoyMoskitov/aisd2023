@@ -1,0 +1,14 @@
+list: prog3.o liblist.a
+	gcc -o list prog3.o -L. -llist
+prog.o: prog3.c
+	gcc -c prog3.c
+liblist.a: queue.o
+	ar r liblist.a queue.o
+queue.o: queue.c
+	gcc -c queue.c
+clean:
+	rm *.o
+	rm *.a
+
+
+

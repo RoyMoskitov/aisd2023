@@ -1,0 +1,14 @@
+table3g: 3g.o lib3g.a libg.o
+	gcc -o table3g 3g.o libg.o -L. -l3g
+lib3g.a: lib3g.o
+	ar r lib3g.a lib3g.o
+lib3g.o: lib3g.c
+	gcc -c lib3g.c
+libg.o: libg.c
+	gcc -c libg.c
+3g.o:
+	gcc -c 3g.c
+clean:
+	rm *.o
+	rm *.a
+	rm table3g

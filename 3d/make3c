@@ -1,0 +1,14 @@
+table3c: 3c.o lib3c.a libc.o
+	gcc -o table3c 3c.o libc.o -L. -l3c
+lib3c.a: lib3c.o
+	ar r lib3c.a lib3c.o
+3c.o: 3c.c
+	gcc -c 3c.c
+lib3c.o: lib3c.c
+	gcc -c lib3c.c
+libc.o: libc.c
+	gcc -c libc.c
+clean:
+	rm *.o
+	rm *.a
+	rm table3c

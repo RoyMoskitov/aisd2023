@@ -1,0 +1,12 @@
+table3b: try.o lib3b.a
+	gcc -o table3b try.o -L. -l3b
+lib3b.a: lib3b.o
+	ar r lib3b.a lib3b.o
+lib3b.o: lib3b.c
+	gcc -c lib3b.c
+try.o:
+	gcc -c try.c
+clean:
+	rm *.o
+	rm *.a
+	rm table3b
