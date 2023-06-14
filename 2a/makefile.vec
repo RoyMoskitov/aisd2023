@@ -1,0 +1,11 @@
+vector: prog3.o libvector.a
+	gcc -o vector prog3.o -L. -lvector
+prog.o: prog3.c
+	gcc -c prog3.c
+libvector.a: queue2.o
+	ar r libvector.a queue2.o
+queue2.o: queue2.c
+	gcc -c -D VECTOR queue2.c
+clean:
+	rm *.o
+	rm *.a
