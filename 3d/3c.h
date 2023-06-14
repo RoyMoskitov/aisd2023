@@ -5,17 +5,17 @@
 
 typedef struct KeySpace {
 	int busy;
-    unsigned int data; // ненулевой ключ элемента
-    int len; // длина информации
-    int offset; // смещение в файле (по отношение к началу файла)
+    unsigned int data; 
+    int len; 
+    int offset; 
     int version;
 }KeySpace;
 
 typedef struct Table{
     KeySpace *ks;
-    int msize; // размер области пространства ключей
-    int csize; // количество элементов в области пространства ключей
-    FILE *fd; // дискриптор файла, чтобы выполнять операции с файлом данных
+    int msize; 
+    int csize; 
+    FILE *fd; 
     char *fname;
 }Table;
 

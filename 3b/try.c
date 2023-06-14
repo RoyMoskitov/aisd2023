@@ -1,7 +1,7 @@
 
 #include "main.h"
 
-int dialog(const char *choice[], int N){ //робит
+int dialog(const char *choice[], int N){ 
     char *errchoice = "";
     int rc;
     int i, n;
@@ -26,7 +26,7 @@ int main(){
     int rc;
     if (D_Load2(&t) == 0)return 1;
     while(rc = dialog(choice, N))if(!fptr[rc](&t))break;
-	save(&t); // Выгружаем таблицу, закрываем файл данных
+	save(&t); 
     printf("That's all. Bye!\n");
     destructor(&t); 
     return 0;

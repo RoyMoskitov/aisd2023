@@ -4,18 +4,17 @@
 #include <unistd.h>
 
 typedef struct KeySpace {
-    unsigned int data;// ненулевой ключ элемента
-    int len1; // длина информации
-    int offset1; // смещение в файле (по отношение к началу файла)
-    int len2;
+    unsigned int data;]
+    int len1; 
+    int offset1;     int len2;
     int offset2;
 }KeySpace;
 
 typedef struct Table{
     KeySpace *ks;
-    int msize;// размер области пространства ключей
-    int csize;// количество элементов в области пространства ключей
-    FILE *fd; // дискриптор файла, чтобы выполнять операции с файлом данных
+    int msize;
+    int csize;
+    FILE *fd; 
     char *fname;
 }Table;
 

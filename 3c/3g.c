@@ -1,7 +1,7 @@
 #include "3g.h"
 #include "dia_c.h"
 
-int dialog(const char *choice[], int N){ //робит
+int dialog(const char *choice[], int N){ 
     char *errchoice = "";
     int rc;
     int i, n;
