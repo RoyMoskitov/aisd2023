@@ -17,7 +17,7 @@ int D_Add(Table *t){
     info = getstr();
     if (info == NULL) return 0;
     rc = add_el(t, info, k);
-    printf("%s: %s\n", errmsgs[rc], info);
+    printf("%s\n", errmsgs[rc]);
     free(info);
     return 1;
 }
@@ -33,7 +33,7 @@ int D_Del(Table *t){
     n = scanf("%d",&k);
     if(n <= 0 || k<=0) return 0;
     rc = del_el(t, key, k);
-    printf("%s: %s\n", errmsgs[rc], key);
+    printf("%s\n", errmsgs[rc]);
     free(key);
     return 1;
 }
@@ -85,9 +85,7 @@ int D_Find(Table *t){
 }
 
 int D_Show(Table *t){
-    int rc;
-    rc = print(t);
-    printf("%s!\n", errmsgs[rc]);
+    print(t);
     return 1;
 }
 
@@ -99,7 +97,6 @@ int D_Load(Table *t){
     char* fn = getstr();
     if(fn==NULL) return 0;
     rc = load(t, fn);
-    printf("%s\n", errmsgs[rc]);
     free(fn);
     return 1;
 }

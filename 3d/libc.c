@@ -11,7 +11,7 @@ const char *errmsgs[] = {"Successfully", "Key not found", "Table overflow", "The
 int D_Add(Table *t){ 
     int rc, n, k, rk;
     char *info;
-    printf("Enter element's data: -->");
+    printf("Enter element's data:");
     n = scanf("%d",&k);
     if(n <= 0 || k<=0) return 0;
     printf("Enter key:\n");
@@ -20,29 +20,29 @@ int D_Add(Table *t){
     info = getstr();
     if (info == NULL) return 0;
     rc = add_el(t, info, k);
-    printf("%s: %s\n", errmsgs[rc], info);
+    printf("%s\n", errmsgs[rc]);
     free(info);
     return 1;
 }
 
 int D_Del(Table *t){
     int rc, n, k;
-    printf("Enter key: -->");
+    printf("Enter key:");
     scanf("%*[^\n]");
     scanf("%*c");
     char* key = getstr();
     if(key==NULL) return 0;  
-    printf("Enter the element's version: -->");
+    printf("Enter the element's version:");
     n = scanf("%d",&k);
     if(n <= 0 || k<=0) return 0;
     rc = del_el(t, key, k);
-    printf("%s: %s\n", errmsgs[rc], key);
+    printf("%s\n", errmsgs[rc]);
     free(key);
     return 1;
 }
 
 int D_Find_all (Table *t){
-    printf("Enter key: -->");
+    printf("Enter key:");
     scanf("%*[^\n]");
     scanf("%*c");
     char* key = getstr();
@@ -69,12 +69,12 @@ int D_Find_all (Table *t){
 
 int D_Find(Table *t){ 
 	int k, n;
-    printf("Enter key: -->");
+    printf("Enter key:");
     scanf("%*[^\n]");
     scanf("%*c");
     char* key = getstr();
     if(key==NULL) return 0; 
-    printf("Enter the element's version: -->");
+    printf("Enter the element's version:");
     n = scanf("%d",&k);
     if(n <= 0 || k<=0) return 0;       
     char *str;
@@ -95,33 +95,29 @@ int D_Find(Table *t){
 }
 
 int D_Show(Table *t){
-    int rc;
-    rc = print(t);
-    printf("%s!\n", errmsgs[rc]);
+    print(t);;
     return 1;
 }
 
 int D_Load(Table *t){
     int rc;
-    printf("Enter file name: -->");
+    printf("Enter file name:");
     scanf("%*[^\n]");
     scanf("%*c");
     char* fn = getstr();
     if(fn==NULL) return 0;
     rc = load(t, fn);
-    printf("%s\n", errmsgs[rc]);
     free(fn);
     return 1;
 }
 
 int D_Load2(Table* t){ 
     int msize;
-    printf("Enter file name: --> ");
+    printf("Enter file name:");
     t->fname = getstr();
     if(t->fname == NULL) return 0;
     if (load2(t, t->fname) == 0){ 
         create_table(t, t->fname); 
     }
-    //free(fn);
     return 1;
 }

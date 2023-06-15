@@ -10,7 +10,7 @@ void destructor(Table* t){
 
 char *getstr() { 
     int len = 0;
-    char* str = (char*)malloc(1);
+    char* str = malloc(sizeof(char));
     char buf[81];
     int n;
     *str='\0';
@@ -25,8 +25,8 @@ char *getstr() {
             scanf("%*c");
         } else {
             int lenbuf = strlen(buf);
-            int strl = len+ lenbuf;
-            str = (char*)realloc(str, strl+1);
+            int strl = len + lenbuf;
+            str = realloc(str, strl+1);
             str = strcat(str, buf);
         }
     } while (n>0);
@@ -34,33 +34,20 @@ char *getstr() {
 }
 
 int create_table(Table* t, char* fn){
-    int n;
-    printf("%s\n",fn);
     do{
-        printf("Enter the maximum size of the table: --> "); 
-        n=scanf("%d",&(t->msize));
-        if(n<0){
-                return 0;
-                break;
-        }if(n==0){
-            printf("Incorrect value.True again!\n");
-            scanf("%*[^\n]");
-            scanf("%*c");
-        }
-        if(n== 1 && (t->msize<1)){
-            printf("Incorrect value.True again!\n");
+        printf("Enter the maximum size of the table:"); 
+        int n=scanf("%d",&(t->msize));
+        if(n<0) return 0;
+        else if(n==0) printf("Try again\n");
+        else if (n== 1 && (t->msize<1)){
+            printf("Try again\n");
             n=0;
         }
     }while(n!=1);
-    t->csize=0;
+    if (t->fd == NULL) return 0;
     t->fd = fopen(fn, "w+b");
-    if (t->fd == NULL) {
-        t->ks=NULL;
-        printf("stok\n");
-        fclose(t->fd);
-        return 0;
-    }
-    t->ks=(KeySpace*)calloc((t->msize), sizeof(KeySpace)); 
+    t->csize=0;
+    t->ks=calloc((t->msize), sizeof(1*KeySpace)); 
     fwrite(&t->msize, sizeof(int), 1, t->fd);
     fwrite(&t->csize, sizeof(int), 1, t->fd);
     fwrite(t->ks, sizeof(KeySpace), t->msize, t->fd);
@@ -229,15 +216,10 @@ int load(Table* t, char* fn){
 	        rs=add_el(t,key,par,data);
 	        free(key);
 	        free(par);
-	        if(rs==1) count--;
 	        if(rs==2) return 2;
 	        count++;
 	    }
 	    if (read != 3 && !feof(file)) return 7;
-	    if (ferror(file)) {
-	        fclose(file);
-	        return 7;
-	    }
     } while (!feof(file));
     fclose(file);
     t->csize=count;
@@ -248,7 +230,6 @@ int load2(Table* t, char* fn){
     t->fd=fopen(fn, "r+b");
     if (t->fd == NULL) return 0;
     fread(&(t->msize), sizeof(int), 1, t->fd);
-    printf("%d\n", t->msize);
     t->ks=(KeySpace*)malloc(t->msize*sizeof(KeySpace)); 
     fread(&t->csize, sizeof(int), 1, t->fd);
     fread(t->ks, sizeof(KeySpace), t->csize, t->fd);
@@ -296,26 +277,26 @@ int D_New(Table *t){
     if(key==NULL) return 0;  
     printf("Your tab:\n");
     rc = new_tab(t, key);
-    printf("%s!\n", errmsgs[rc]);
+    printf("%s\n", errmsgs[rc]);
     free(key);	
 	return 1;
 }
 
 int D_Del(Table *t){
     int rc, n;
-    printf("Enter key: -->");
+    printf("Enter key:");
     scanf("%*[^\n]");
     scanf("%*c");
     char* key = getstr();
     if(key==NULL) return 0;  
     rc = del_el(t, key);
-    printf("%s: %s\n", errmsgs[rc], key);
+    printf("%s\n", errmsgs[rc]);
     free(key);
     return 1;
 }
 
 int D_Find(Table *t){ 
-    printf("Enter key: -->");
+    printf("Enter key:");
     scanf("%*[^\n]");
     scanf("%*c");
     char* key = getstr();
@@ -340,31 +321,28 @@ int D_Find(Table *t){
 }
 
 int D_Show(Table *t){
-    int rc;
-    rc = print(t);
-    printf("%s!\n", errmsgs[rc]);
+    print(t);
     return 1;
 }
 
 int D_Load(Table *t){
     int rc;
-    printf("Enter file name: -->");
+    printf("Enter file name:");
     scanf("%*[^\n]");
     scanf("%*c");
     char* fn = getstr();
     if(fn==NULL) return 0;
     rc = load(t, fn);
-    printf("%s\n", errmsgs[rc]);
     free(fn);
     return 1;
 }
 
 int D_Load2(Table* t){ 
     int msize;
-    printf("Enter file name: --> ");
+    printf("Enter file name:");
     t->fname = getstr();
     if(t->fname == NULL) return 0;
-    if (load2(t, t->fname) == 0){ 
+    else if (load2(t, t->fname) == 0){ 
         create_table(t, t->fname); 
     }
     //free(fn);

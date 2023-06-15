@@ -14,9 +14,9 @@ void destructor(Table* t){
 	free(ks);
 }
 
-char *getstr() { // робит
+char *getstr() { 
     int len = 0;
-    char* str = (char*)malloc(1);
+    char* str = malloc(sizeof(char));
     char buf[81];
     int n;
     *str='\0';
@@ -31,8 +31,8 @@ char *getstr() { // робит
             scanf("%*c");
         } else {
             int lenbuf = strlen(buf);
-            int strl = len+ lenbuf;
-            str = (char*)realloc(str, strl+1);
+            int strl = len + lenbuf;
+            str = realloc(str, strl+1);
             str = strcat(str, buf);
         }
     } while (n>0);
@@ -40,32 +40,21 @@ char *getstr() { // робит
 }
 
 int create_table(Table* t, char* fn){
-    int n;
-    printf("%s\n",fn);
-    do{
-        printf("Enter the maximum size of the table: --> "); 
-        n=scanf("%d",&(t->msize));
+    do {
+        printf("Enter the maximum size: "); 
+        int n=scanf("%d",&(t->msize));
         if(n<0){
-                return 0;
-                break;
+        	return 0;
         }if(n==0){
-            printf("Incorrect value.True again!\n");
-            scanf("%*[^\n]");
-            scanf("%*c");
-        }
-        if(n== 1 && (t->msize<1)){
-            printf("Incorrect value.True again!\n");
+            printf("Try again\n");
+        } else if(n== 1 && (t->msize<1)){
+            printf("Try again\n");
             n=0;
         }
     }while(n!=1);
-    t->csize=0;
+    if (t->fd == NULL) return 0;
     t->fd = fopen(fn, "w+b");
-    if (t->fd == NULL) {
-        t->ks=NULL;
-        printf("stok\n");
-        fclose(t->fd);
-        return 0;
-    }
+    t->csize=0;
     t->ks=(KeySpace*)calloc((t->msize), sizeof(KeySpace)); 
     fwrite(&t->msize, sizeof(int), 1, t->fd);
     fwrite(&t->csize, sizeof(int), 1, t->fd);
@@ -239,15 +228,10 @@ int load(Table* t, char* fn){
 	    if (read == 3){
 	        rs=add_el(t,key,data);
 	        free(key);
-	        if(rs==1) count--;
 	        if(rs==2) return 2;
 	        count++;
 	    }
 	    if (read != 3 && !feof(file)) return 7;
-	    if (ferror(file)) {
-	        fclose(file);
-	        return 7;
-	    }
     } while (!feof(file));
     fclose(file);
     t->csize=count;
@@ -258,7 +242,6 @@ int load2(Table* t, char* fn){
     t->fd=fopen(fn, "r+b");
     if (t->fd == NULL) return 0; 
     fread(&(t->msize), sizeof(int), 1, t->fd); 
-    printf("%d\n", t->msize);
     t->ks=(KeySpace*)malloc(t->msize*sizeof(KeySpace)); 
     fread(&t->csize, sizeof(int), 1, t->fd);
     fread(t->ks, sizeof(KeySpace), t->msize, t->fd);
@@ -266,11 +249,11 @@ int load2(Table* t, char* fn){
 }
 
 int save(Table *t){
+	if (fd == NULL) return 0;
     fseek(t->fd, sizeof(int), SEEK_SET); 
     fwrite(&t->csize, sizeof(int), 1, t->fd); 
     fwrite(t->ks, sizeof(KeySpace), t->msize, t->fd);
     fclose(t->fd);
-    t->fd = NULL;
     return 1;
 }
 

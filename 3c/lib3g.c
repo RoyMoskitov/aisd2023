@@ -38,25 +38,19 @@ char *getstr() {
 }
 
 int create_table(Table* t){
-    int n;
+	int create_table(Table* t, char* fn){
     do{
-        printf("Enter the maximum size of the table: --> ");
-        n=scanf("%d",&(t->msize));
-        if(n<0){
-                return 0;
-                break;
-        }if(n==0){
-            printf("Incorrect value.True again!\n");
-            scanf("%*[^\n]");
-            scanf("%*c");
-        }
-        if(n== 1 && (t->msize<1)){
-            printf("Incorrect value.True again!\n");
+        printf("Enter the maximum size of the table:");
+        int n=scanf("%d",&(t->msize));
+        if(n<0) return 0;
+        else if(n==0) printf("Try again\n");
+        else if (n== 1 && (t->msize<1)){
+            printf("Try again\n");
             n=0;
         }
     }while(n!=1);
     t->csize=0;
-    t->ks=(KeySpace*)calloc((t->msize), sizeof(KeySpace)); 
+	t->ks=(KeySpace*)calloc((t->msize), sizeof(KeySpace));
     return 1;
 }
 
@@ -201,135 +195,14 @@ int load(Table* t, char* fn){
 	    if (read == 3){
 	        rs=add_el(t,key,data);
 	        free(key);
-	        if(rs==1) count--;
 	        if(rs==2) return 2;
 	        count++;
 	    }
 	    if (read != 3 && !feof(file)) return 7;
-	    if (ferror(file)) {
-	        fclose(file);
-	        return 7;
-	    }
     } while (!feof(file));
     fclose(file);
     t->csize=count;
     return 0;
 }
 
-int load2(Table* t, char* fn){ 
-    t->fd=fopen(fn, "r+b");
-    if (t->fd == NULL) return 0; 
-    fread(&(t->msize), sizeof(int), 1, t->fd); 
-    printf("%d\n", t->msize);
-    t->ks=(KeySpace*)malloc(t->msize*sizeof(KeySpace));
-    fread(&t->csize, sizeof(int), 1, t->fd);
-    fread(t->ks, sizeof(KeySpace), t->msize, t->fd);
-    return 1;
-}
 
-int save(Table *t){
-    fseek(t->fd, sizeof(int), SEEK_SET); 
-    fwrite(&t->csize, sizeof(int), 1, t->fd);
-    fwrite(t->ks, sizeof(KeySpace), t->msize, t->fd); 
-    fclose(t->fd);
-    t->fd = NULL;
-    return 1;
-}
-
-/*int D_Add(Table *t){ 
-    int rc, n, k, rk;
-    char *info;
-    printf("Enter element's data: -->");
-    n = scanf("%d",&k);
-    if(n <= 0 || k<=0) return 0;
-    printf("Enter key:\n");
-    scanf("%*[^\n]");
-    scanf("%*c");
-    info = getstr();
-    if (info == NULL) return 0;
-    rc = add_el(t, info, k);
-    printf("%s: %s\n", errmsgs[rc], info);
-    free(info);
-    return 1;
-}
-
-int D_Del(Table *t){
-    int rc, n, k;
-    printf("Enter key: -->");
-    scanf("%*[^\n]");
-    scanf("%*c");
-    char* key = getstr();
-    if(key==NULL) return 0;  
-    printf("Enter the element's version: -->");
-    n = scanf("%d",&k);
-    if(n <= 0 || k<=0) return 0;
-    rc = del_el(t, key, k);
-    printf("%s: %s\n", errmsgs[rc], key);
-    free(key);
-    return 1;
-}
-
-int D_Find_all (Table *t){
-    printf("Enter key: -->");
-    scanf("%*[^\n]");
-    scanf("%*c");
-    char* key = getstr();
-    if(key==NULL) return 0; 	
-	int check, count=0, flag=0;
-	char *str;
-	KeySpace *ks = t->ks;
-	for (int i=0; i<t->msize; ++i){
-		if (ks[i].busy == 1 && strcmp(ks[i].key, key) == 0){
-			flag = 1;
-			printf("%s | %d | %d\n", ks[i].key, ks[i].data, ks[i].version);
-		}
-	}
-	if (flag == 0) printf("Table is empty\n");
-	free(key);
-	return 1;
-}
-
-int D_Find(Table *t){ 
-	int k, n;
-    printf("Enter key: -->");
-    scanf("%*[^\n]");
-    scanf("%*c");
-    char* key = getstr();
-    if(key==NULL) return 0; 
-    printf("Enter the element's version: -->");
-    n = scanf("%d",&k);
-    if(n <= 0 || k<=0) return 0;       
-    char *str;
-    KeySpace *ks = t->ks;
-    KeySpace *check = find_element(t, key, k);
-    //printf("check %d\n", check);
-    if (check == NULL) {
-        printf("Item was not found\n");
-    } else {
-        //printf("%s | %d | %d", ks[check].key, ks[check].data, ks[check].version);
-        printf("%s | %d | %d", check->key, check->data, check->version);
-    }
-    free(key);
-    return 1;
-}
-
-int D_Show(Table *t){
-    int rc;
-    rc = print(t);
-    printf("%s!\n", errmsgs[rc]);
-    return 1;
-}
-
-int D_Load(Table *t){
-    int rc;
-    printf("Enter file name: -->");
-    scanf("%*[^\n]");
-    scanf("%*c");
-    char* fn = getstr();
-    if(fn==NULL) return 0;
-    rc = load(t, fn);
-    printf("%s\n", errmsgs[rc]);
-    free(fn);
-    return 1;
-}
-*/
